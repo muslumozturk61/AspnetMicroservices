@@ -40,6 +40,12 @@ services:
       - mssql_log:/var/opt/mssql/log
       - mssql_secrets:/var/opt/mssql/secrets
 
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
   
   pgadmin:
     container_name: pgadmin
@@ -105,4 +111,15 @@ services:
       - discountdb
     ports:
       - "8003:80"
+
+
+  ordering.api:
+    container_name: ordering.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:OrderingConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=admin1234!789"  
+    depends_on:
+        - orderdb
+    ports:
+        - "8004:80"
 
